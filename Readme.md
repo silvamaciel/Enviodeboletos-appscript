@@ -1,58 +1,105 @@
-# Script de Envio de Boletos por E-mail
+# Projeto de Envio Automático de Boletos por E-mail
 
-Este script em Google Apps Script permite o envio automatizado de boletos por e-mail para destinatários listados em uma planilha do Google Sheets. Ele busca os arquivos de boletos em uma pasta do Google Drive e os envia para cada destinatário de acordo com as informações da planilha.
+Este projeto utiliza o Google Apps Script para realizar o envio automatizado de boletos por e-mail. Com base nos dados de uma planilha do Google Sheets, o script busca arquivos de boletos em uma pasta do Google Drive e os envia para os destinatários indicados na planilha.
 
-## Funcionalidade do Script
+## Funcionalidades
 
-1. Acessa uma planilha do Google Sheets chamada **"ENVIODEBOLETOS"**.
-2. Coleta os dados de cada linha da planilha, como nome, unidade, e-mail, empreendimento, e outros detalhes.
-3. Verifica a presença de uma subpasta no Google Drive com o nome do mês e ano atuais.
-4. Dentro da subpasta, encontra o arquivo correspondente à unidade especificada.
-5. Envia um e-mail para cada destinatário com o boleto anexado, seguindo o modelo de mensagem especificado.
+- **Busca dados na planilha do Google Sheets** chamada **"ENVIODEBOLETOS"**.
+- Verifica se há uma subpasta específica no Google Drive, baseada no **mês e ano atuais**, onde os arquivos de boletos estão armazenados.
+- Procura o arquivo correspondente à unidade do destinatário e envia por e-mail com um modelo de mensagem específico.
+- Registra os e-mails enviados e notifica caso algum arquivo não seja encontrado.
 
-## Estrutura da Planilha
+---
 
-A planilha deve conter as seguintes colunas (na ordem e estrutura esperada):
+## Configuração do Projeto
 
-1. **Código Nome**: Identificação do cliente.
-2. **Unidade**: Unidade do cliente.
-3. **Nome**: Nome do destinatário.
-4. **Empreendimento**: Nome do empreendimento.
-5. **E-mail**: Endereço de e-mail do destinatário.
-6. **Empresa**: Nome da empresa.
-7. **Apartamento**: Número do apartamento.
-8. **Bairro**: Bairro onde o empreendimento está localizado.
+### Passo 1: Criação da Planilha no Google Sheets
 
-A primeira linha da planilha deve ser o cabeçalho, e os dados começam a partir da segunda linha.
+1. **Acesse o Google Sheets**: Abra [Google Sheets](https://sheets.google.com).
+2. **Crie uma nova planilha**: Clique em **"Em branco"** para criar uma nova planilha.
+3. **Renomeie a planilha**: Nomeie a planilha como **"Envio de Boletos"** ou outro nome que preferir.
+4. **Adicione as Colunas**: Na primeira linha, insira as seguintes colunas exatamente nesta ordem:
 
-## Configuração do Google Drive
+   - A1: `Código Nome`
+   - B1: `Unidade`
+   - C1: `Nome`
+   - D1: `Empreendimento`
+   - E1: `E-mail`
+   - F1: `Empresa`
+   - G1: `Apartamento`
+   - H1: `Bairro`
 
-1. Crie uma pasta principal no Google Drive para armazenar os arquivos dos boletos.
-2. Dentro desta pasta, crie subpastas nomeadas no formato `MM/YYYY`, correspondendo ao mês e ano dos boletos a serem enviados.
-3. Substitua o valor de `pastaId` no código com o ID da sua pasta principal do Google Drive.
+   A planilha deve ter uma estrutura como esta:
 
-## Configuração do Script
+   | Código Nome | Unidade | Nome | Empreendimento | E-mail             | Empresa   | Apartamento | Bairro  |
+   |-------------|---------|------|----------------|--------------------|-----------|-------------|---------|
+   | 001234      | UN-001  | João | Empreendimento X | email@exemplo.com | Empresa A | 101         | Centro  |
 
-1. Abra o **Google Apps Script** a partir da planilha do Google Sheets onde o script será executado.
-2. Cole o código no editor de script.
-3. No campo `pastaId`, substitua pelo ID da sua pasta principal do Google Drive onde os arquivos estão armazenados.
-4. Atualize a URL da imagem da assinatura se desejar incluir uma diferente.
+5. **Renomeie a aba**: Clique na aba padrão "Planilha1" e renomeie para **"ENVIODEBOLETOS"** (o script busca a aba por este nome).
 
-## Exemplo de Uso
+---
 
-1. Preencha a planilha com os dados dos destinatários e informações dos boletos.
-2. Execute o script clicando em **Executar > Enviar E-mails** no Google Apps Script.
-3. O script enviará e-mails para cada destinatário com o boleto referente ao empreendimento, desde que o arquivo do boleto correspondente seja encontrado na subpasta.
+### Passo 2: Configuração do Google Apps Script
+
+1. **Abrindo o Google Apps Script**:
+   - Na planilha criada, vá até **"Extensões"** no menu superior e selecione **"Apps Script"**. Isso abrirá o editor do Google Apps Script em uma nova aba.
+   
+2. **Inserindo o Código**:
+   - Apague qualquer conteúdo padrão que esteja no editor.
+   - Cole o código do script completo na área de código.
+
+3. **Configuração do ID da Pasta do Google Drive**:
+   - Encontre a linha `var pastaId = '1TSf-r248xIVbd-vnYa-0brwR65WECS1-';`.
+   - Substitua `'1TSf-r248xIVbd-vnYa-0brwR65WECS1-'` pelo **ID da sua pasta principal** do Google Drive onde os arquivos de boletos estão armazenados. 
+   - Para obter o ID da pasta:
+     - Acesse a pasta desejada no Google Drive.
+     - O ID aparece na URL, logo após `https://drive.google.com/drive/folders/`.
+
+4. **Configuração da URL da Assinatura** (opcional):
+   - Se desejar, substitua a URL de `assinaturaImagemUrl` para uma imagem de assinatura personalizada.
+
+---
+
+### Passo 3: Autorizar o Script
+
+1. **Executar o Script pela Primeira Vez**:
+   - No editor do Apps Script, clique em **"Executar"** (ícone de triângulo) para rodar o script.
+   - O Google solicitará que você **autorize o script** para acessar o Google Sheets e o Google Drive.
+   - Clique em **"Revisar permissões"**, escolha sua conta do Google e clique em **"Permitir"** para conceder as permissões necessárias.
+
+---
+
+### Passo 4: Estrutura de Pastas no Google Drive
+
+1. **Criação da Pasta Principal**:
+   - No Google Drive, crie uma pasta principal onde serão armazenados os boletos. Nomeie essa pasta como preferir.
+
+2. **Subpastas Mensais**:
+   - Dentro da pasta principal, crie subpastas no formato `MM/YYYY` (mês/ano), como `01/2024`, `02/2024`, etc.
+   - Cada subpasta deve conter os arquivos de boletos referentes ao mês e ano especificados. O script procura o boleto correspondente à unidade do cliente usando as primeiras seis letras do valor da coluna `Unidade`.
+
+---
+
+### Passo 5: Executar o Script e Enviar E-mails
+
+1. **Preencher a Planilha**:
+   - Adicione os dados dos destinatários na planilha, incluindo as informações da unidade, nome, e-mail e outros.
+
+2. **Executar o Envio**:
+   - No editor do Google Apps Script, clique em **"Executar"** para rodar o script.
+   - O script enviará automaticamente um e-mail para cada destinatário, incluindo o boleto correspondente como anexo PDF, caso o arquivo seja encontrado na subpasta especificada.
+
+---
 
 ## Estrutura do Código
 
 - `SpreadsheetApp.getActiveSpreadsheet()` e `getSheetByName`: Acessa a planilha ativa e a aba com o nome específico.
 - `DriveApp.getFolderById(pastaId)`: Acessa a pasta principal no Google Drive pelo ID.
 - Laço `for`: Itera sobre cada linha de dados na planilha.
-- `MailApp.sendEmail`: Envia o e-mail com o arquivo de boleto anexado.
+- `MailApp.sendEmail`: Envia o e-mail com o boleto anexado, utilizando as informações do destinatário e o conteúdo do corpo da mensagem.
 
-## Observações
+## Observações Finais
 
-- **Subpasta do Mês e Ano**: Certifique-se de que o nome da subpasta esteja no formato `MM/YYYY` e que corresponda ao mês e ano atuais.
-- **Formato do Arquivo**: O script assume que o arquivo é um PDF e o envia como tal.
-- **Erros e Logs**: O script registra no console do Google Apps Script as informações sobre cada e-mail enviado e notifica se algum arquivo não foi encontrado.
+- **Formato das Subpastas**: Certifique-se de que as subpastas no Google Drive estejam no formato `MM/YYYY`.
+- **Formato do Arquivo**: O script considera que os arquivos de boletos são PDFs e os envia como tal.
+- **Erros e Logs**: O script registra as atividades e erros no console do Google Apps Script, indicando se algum e-mail foi enviado ou se algum arquivo não foi encontrado para determinada unidade.
